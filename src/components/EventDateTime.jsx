@@ -1,4 +1,4 @@
-export default function EventDateTime({ start, end }) {
+export function formatEventDateTime(start, end) {
 	const startDate = new Date(start);
 	const endDate = new Date(end);
 	const dateString = startDate.toLocaleDateString("en-GB", {
@@ -17,12 +17,5 @@ export default function EventDateTime({ start, end }) {
 		minute: "2-digit",
 		hour12: false,
 	});
-	return (
-		<>
-			<p>{dateString}</p>
-			<p>
-				{startTime} – {endTime}
-			</p>
-		</>
-	);
+	return { dateString, timeString: `${startTime} – ${endTime}` };
 }
