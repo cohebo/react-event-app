@@ -1,5 +1,6 @@
 import { Card, CardBody, Stack, Heading, Image, Text } from "@chakra-ui/react";
-import { formatEventDateTime } from "./EventDateTime";
+import formatEventDateTime from "../helpers/formatEventDateTime";
+import getCategoryNames from "../helpers/getCategoryNames";
 
 export const EventItem = ({ event }) => {
 	return (
