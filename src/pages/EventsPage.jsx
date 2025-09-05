@@ -1,8 +1,8 @@
 import React from "react";
 import { SimpleGrid, Container, Box } from "@chakra-ui/react";
-
 import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
+import { SearchBar } from "../components/SearchBar";
 
 export const eventsLoader = async () => {
 	const [eventsResponse, categoriesResponse] = await Promise.all([fetch("http://localhost:3000/events"), fetch("http://localhost:3000/categories")]);
@@ -16,17 +16,31 @@ export const eventsLoader = async () => {
 
 export const EventsPage = () => {
 	const { events, categories } = useLoaderData();
+	const [search, setSearch] = React.useState("");
+
+	const filteredEvents = events.filter((event) => event.title.toLowerCase().includes(search.toLowerCase()) || event.description.toLowerCase().includes(search.toLowerCase()));
+
 	return (
 		<Box bg="gray.50">
 			<Container
 				maxWidth="1200px"
 				paddingY={8}
 				bg="gray.50">
+				<Box
+					mb={6}
+					display="flex"
+					justifyContent="center">
+					<SearchBar
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder="Zoek op titel of omschrijving..."
+					/>
+				</Box>
 				<SimpleGrid
 					columns={[1, 2, 3]}
 					spacing={4}>
-					{events && events.length > 0 ? (
-						events.map((event) => (
+					{filteredEvents && filteredEvents.length > 0 ? (
+						filteredEvents.map((event) => (
 							<div key={event.id}>
 								<EventItem event={{ ...event, categories }} />
 							</div>
