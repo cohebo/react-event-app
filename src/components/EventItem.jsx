@@ -1,5 +1,5 @@
 import { Card, CardBody, Stack, Heading, Image, Text } from "@chakra-ui/react";
-import EventDateTime from "./EventDateTime";
+import { formatEventDateTime } from "./EventDateTime";
 
 export const EventItem = ({ event }) => {
 	return (
@@ -34,14 +34,24 @@ export const EventItem = ({ event }) => {
 						fontSize="sm">
 						Location: {event.location}
 					</Text>
-					<Text
-						fontSize="sm"
-						color="gray.600">
-						<EventDateTime
-							start={event.startTime}
-							end={event.endTime}
-						/>
-					</Text>
+					{(() => {
+						const { dateString, timeString } = formatEventDateTime(event.startTime, event.endTime);
+						return (
+							<>
+								<Text
+									fontSize="sm"
+									color="gray.600">
+									{dateString}
+								</Text>
+								<Text
+									fontSize="sm"
+									color="gray.600">
+									{timeString}
+								</Text>
+								<Text>{event.categoryIds}</Text>
+							</>
+						);
+					})()}
 				</Stack>
 			</CardBody>
 		</Card>
