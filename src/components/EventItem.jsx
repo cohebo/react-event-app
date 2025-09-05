@@ -15,6 +15,9 @@ export const EventItem = ({ event }) => {
 			overflow="hidden"
 			boxShadow="md"
 			h="100%"
+			cursor="pointer"
+			transition="all 0.2s ease-in-out"
+			_hover={{ transform: "translateY(-4px)", shadow: "lg", borderColor: "blue.300" }}
 			onClick={() => handleClick(event.id)}>
 			<Image
 				src={event.image}
