@@ -1,14 +1,21 @@
 import { Card, CardBody, Stack, Heading, Image, Text, Badge } from "@chakra-ui/react";
 import formatEventDateTime from "../helpers/formatEventDateTime";
+import { useNavigate } from "react-router-dom";
 
 export const EventItem = ({ event }) => {
+	const navigate = useNavigate();
+	const handleClick = (id) => {
+		navigate(`/events/${id}`);
+	};
+
 	return (
 		<Card
 			variant={"outline"}
 			borderRadius="md"
 			overflow="hidden"
 			boxShadow="md"
-			h="100%">
+			h="100%"
+			onClick={() => handleClick(event.id)}>
 			<Image
 				src={event.image}
 				alt={event.title}
