@@ -1,5 +1,5 @@
 import React from "react";
-import { Heading } from "@chakra-ui/react";
+import { Box, Container, Stack, Image, Heading, Text, Badge, AspectRatio } from "@chakra-ui/react";
 import { useLoaderData } from "react-router-dom";
 
 export const eventLoader = async ({ params }) => {
