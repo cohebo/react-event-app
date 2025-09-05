@@ -4,15 +4,17 @@ import { useLoaderData } from "react-router-dom";
 import formatEventDateTime from "../helpers/formatEventDateTime";
 
 export const eventLoader = async ({ params }) => {
-	const [eventRes, categoriesRes] = await Promise.all([fetch(`http://localhost:3000/events/${params.id}`), fetch("http://localhost:3000/categories")]);
-	if (!eventRes.ok || !categoriesRes.ok) throw new Error("Failed to fetch data");
+	const [eventRes, categoriesRes, usersRes] = await Promise.all([fetch(`http://localhost:3000/events/${params.id}`), fetch("http://localhost:3000/categories"), fetch("http://localhost:3000/users")]);
+	if (!eventRes.ok || !categoriesRes.ok || !usersRes.ok) throw new Error("Failed to fetch data");
 	const event = await eventRes.json();
 	const categories = await categoriesRes.json();
-	return { ...event, categories };
+	const users = await usersRes.json();
+	return { ...event, categories, users };
 };
 
 export const EventPage = () => {
 	const event = useLoaderData();
+	const eventAuthor = event.users?.find((u) => u.id === event.createdBy);
 	return (
 		<Box bg="gray.50">
 			<Container
@@ -29,7 +31,8 @@ export const EventPage = () => {
 					<Stack
 						direction={["column", "row"]}
 						w="100%"
-						h={["auto", "500px"]}>
+						h={["auto", "500px"]}
+						spacing={0}>
 						<Box
 							w={["100%", "50%"]}
 							minW={0}>
@@ -113,6 +116,32 @@ export const EventPage = () => {
 											)
 									)}
 								</Stack>
+								{eventAuthor ? (
+									<Box
+										display="flex"
+										alignItems="center"
+										mt={4}>
+										<Image
+											src={eventAuthor.image}
+											alt={eventAuthor.name}
+											boxSize="36px"
+											borderRadius="full"
+											mr={2}
+										/>
+										<Text
+											fontSize="sm"
+											color="gray.700">
+											Gemaakt door: {eventAuthor.name}
+										</Text>
+									</Box>
+								) : (
+									<Text
+										fontSize="sm"
+										color="red.500"
+										mt={4}>
+										Author not found
+									</Text>
+								)}
 							</Stack>
 						</Box>
 					</Stack>
