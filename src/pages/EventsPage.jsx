@@ -1,6 +1,7 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
 import { useLoaderData } from "react-router-dom";
+import { EventItem } from "../components/EventItem";
 
 export const eventsLoader = async () => {
 	const response = await fetch("http://localhost:3000/events");
@@ -15,7 +16,15 @@ export const EventsPage = () => {
 	return (
 		<>
 			<Heading>List of events</Heading>
-			{events && events.length > 0 ? events.map((event) => <div key={event.id}>{event.title}</div>) : <div>Geen events gevonden.</div>}
+			{events && events.length > 0 ? (
+				events.map((event) => (
+					<div key={event.id}>
+						<EventItem event={event} />
+					</div>
+				))
+			) : (
+				<div>Geen events gevonden.</div>
+			)}
 		</>
 	);
 };
