@@ -1,5 +1,5 @@
 import React from "react";
-import { SimpleGrid, Container } from "@chakra-ui/react";
+import { SimpleGrid, Container, Box } from "@chakra-ui/react";
 
 import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
@@ -17,22 +17,25 @@ export const eventsLoader = async () => {
 export const EventsPage = () => {
 	const { events, categories } = useLoaderData();
 	return (
-		<Container
-			maxWidth="1200px"
-			paddingY={8}>
-			<SimpleGrid
-				columns={[1, 2, 3]}
-				spacing={4}>
-				{events && events.length > 0 ? (
-					events.map((event) => (
-						<div key={event.id}>
-							<EventItem event={{ ...event, categories }} />
-						</div>
-					))
-				) : (
-					<div>Geen events gevonden.</div>
-				)}
-			</SimpleGrid>
-		</Container>
+		<Box bg="gray.50">
+			<Container
+				maxWidth="1200px"
+				paddingY={8}
+				bg="gray.50">
+				<SimpleGrid
+					columns={[1, 2, 3]}
+					spacing={4}>
+					{events && events.length > 0 ? (
+						events.map((event) => (
+							<div key={event.id}>
+								<EventItem event={{ ...event, categories }} />
+							</div>
+						))
+					) : (
+						<div>Geen events gevonden.</div>
+					)}
+				</SimpleGrid>
+			</Container>
+		</Box>
 	);
 };
