@@ -53,6 +53,11 @@ export const EventItem = ({ event }) => {
 							</>
 						);
 					})()}
+					<Text
+						fontSize="sm"
+						color="gray.600">
+						{getCategoryNames(event.categoryIds, event.categories || [])}
+					</Text>
 				</Stack>
 			</CardBody>
 		</Card>
