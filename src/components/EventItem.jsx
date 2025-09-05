@@ -7,18 +7,24 @@ export const EventItem = ({ event }) => {
 			variant={"outline"}
 			borderRadius="md"
 			overflow="hidden"
-			boxShadow="md">
-			<CardBody>
-				<Image
-					src={event.image}
-					alt={event.title}
-					objectFit="cover"
-					w="100%"
-					borderRadius={"md"}
-				/>
-				<Stack
-					mt={6}
-					spacing={3}>
+			boxShadow="md"
+			h="100%">
+			<Image
+				src={event.image}
+				alt={event.title}
+				objectFit="cover"
+				w="100%"
+				h="200px"
+				borderTopRadius="md"
+				borderBottomRadius={0}
+				m={0}
+				display="block"
+			/>
+			<CardBody
+				pt={6}
+				pb={4}
+				px={6}>
+				<Stack spacing={3}>
 					<Heading
 						fontSize="xl"
 						fontWeight="bold">
