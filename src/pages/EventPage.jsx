@@ -3,12 +3,11 @@ import { Heading } from "@chakra-ui/react";
 import { useLoaderData } from "react-router-dom";
 
 export const eventLoader = async ({ params }) => {
-	const { id } = params;
-	const response = await fetch(`http://localhost:3000/events/${id}`);
-	if (!response.ok) {
-		throw new Error("Failed to fetch event");
-	}
-	return response.json();
+	const [eventRes, categoriesRes] = await Promise.all([fetch(`http://localhost:3000/events/${params.id}`), fetch("http://localhost:3000/categories")]);
+	if (!eventRes.ok || !categoriesRes.ok) throw new Error("Failed to fetch data");
+	const event = await eventRes.json();
+	const categories = await categoriesRes.json();
+	return { ...event, categories };
 };
 
 export const EventPage = () => {
