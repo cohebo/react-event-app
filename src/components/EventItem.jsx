@@ -1,6 +1,5 @@
-import { Card, CardBody, Stack, Heading, Image, Text } from "@chakra-ui/react";
+import { Card, CardBody, Stack, Heading, Image, Text, Badge } from "@chakra-ui/react";
 import formatEventDateTime from "../helpers/formatEventDateTime";
-import getCategoryNames from "../helpers/getCategoryNames";
 
 export const EventItem = ({ event }) => {
 	return (
@@ -52,11 +51,24 @@ export const EventItem = ({ event }) => {
 							</>
 						);
 					})()}
-					<Text
-						fontSize="sm"
-						color="gray.600">
-						{getCategoryNames(event.categoryIds, event.categories || [])}
-					</Text>
+					<Stack
+						direction="row"
+						spacing={2}>
+						{event.categoryIds.map(
+							(id) =>
+								event.categories.find((category) => category.id === id) && (
+									<Badge
+										key={id}
+										color="blue.500"
+										size="sm"
+										borderRadius="full"
+										px={2}
+										py={1}>
+										{event.categories.find((category) => category.id === id).name}
+									</Badge>
+								)
+						)}
+					</Stack>
 				</Stack>
 			</CardBody>
 		</Card>
