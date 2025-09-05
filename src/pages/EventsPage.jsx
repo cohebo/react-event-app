@@ -1,25 +1,28 @@
 import React from "react";
 import { Heading } from "@chakra-ui/react";
+
 import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
 
 export const eventsLoader = async () => {
-	const response = await fetch("http://localhost:3000/events");
-	if (!response.ok) {
-		throw new Error("Events could not be fetched");
+	const [eventsResponse, categoriesResponse] = await Promise.all([fetch("http://localhost:3000/events"), fetch("http://localhost:3000/categories")]);
+	if (!eventsResponse.ok || !categoriesResponse.ok) {
+		throw new Error("Events or categories could not be fetched");
 	}
-	return await response.json();
+	const events = await eventsResponse.json();
+	const categories = await categoriesResponse.json();
+	return { events, categories };
 };
 
 export const EventsPage = () => {
-	const events = useLoaderData();
+	const { events, categories } = useLoaderData();
 	return (
 		<>
 			<Heading>List of events</Heading>
 			{events && events.length > 0 ? (
 				events.map((event) => (
 					<div key={event.id}>
-						<EventItem event={event} />
+						<EventItem event={{ ...event, categories }} />
 					</div>
 				))
 			) : (
