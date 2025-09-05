@@ -49,7 +49,6 @@ export const EventItem = ({ event }) => {
 									color="gray.600">
 									{timeString}
 								</Text>
-								<Text>{event.categoryIds}</Text>
 							</>
 						);
 					})()}
