@@ -3,7 +3,7 @@ import { Select } from "@chakra-ui/react";
 
 export const CategoryFilter = ({ categories, selectedCategory, onChange, ...props }) => (
 	<Select
-		placeholder="Selecteer een categorie"
+		placeholder="Select category"
 		value={selectedCategory}
 		onChange={onChange}
 		width="100%"
