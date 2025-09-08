@@ -1,4 +1,3 @@
-import React from "react";
 import { InputGroup, InputLeftElement, Input, IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
