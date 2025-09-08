@@ -2,7 +2,7 @@ import React from "react";
 import { InputGroup, InputLeftElement, Input, IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
-export const SearchBar = ({ value, onChange, onSearch, placeholder = "Zoek..." }) => {
+export const SearchBar = ({ value, onChange, onSearch, placeholder = "Search..." }) => {
 	return (
 		<InputGroup width="100%">
 			<InputLeftElement pointerEvents="none">
