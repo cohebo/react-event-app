@@ -36,7 +36,7 @@ export const EventPage = () => {
 					mb={6}>
 					<Button
 						leftIcon={<ArrowBackIcon />}
-						onClick={() => window.history.back()}
+						onClick={() => navigate(-1)}
 						colorScheme="blue"
 						variant="outline"
 						borderRadius={8}>
