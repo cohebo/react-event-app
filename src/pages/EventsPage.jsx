@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { SimpleGrid, Container, Box, Select } from "@chakra-ui/react";
+import { SimpleGrid, Container, Box } from "@chakra-ui/react";
+import { CategoryFilter } from "../components/CategoryFilter";
 import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
 import { SearchBar } from "../components/SearchBar";
@@ -40,23 +41,14 @@ export const EventsPage = () => {
 					<SearchBar
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
-						placeholder="Zoek op titel of omschrijving..."
+						placeholder="Search events..."
 						style={{ width: "100%", maxWidth: "400px" }}
 					/>
-					<Select
-						placeholder="Selecteer een categorie"
-						value={selectedCategory}
+					<CategoryFilter
+						categories={categories}
+						selectedCategory={selectedCategory}
 						onChange={(e) => setSelectedCategory(e.target.value)}
-						width="100%"
-						maxWidth={["100%", "400px", "380px"]}>
-						{categories.map((category) => (
-							<option
-								key={category.id}
-								value={category.id}>
-								{category.name}
-							</option>
-						))}
-					</Select>
+					/>
 				</Box>
 				<SimpleGrid
 					columns={[1, 2, 3]}
