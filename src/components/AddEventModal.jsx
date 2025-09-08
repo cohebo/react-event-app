@@ -1,41 +1,65 @@
 import { useState } from "react";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, Textarea, Select } from "@chakra-ui/react";
+import { useAppContext } from "./AppContext";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, Select, Textarea, FormErrorMessage } from "@chakra-ui/react";
 
-export const AddEventModal = ({ isOpen, onClose, onEventAdded }) => {
-	// States voor alle event-velden
+export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
+	const { users, categories, addEvent } = useAppContext();
+	const [submitted, setSubmitted] = useState(false);
+	const [image, setImage] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-	const [image, setImage] = useState("");
-	const [categoryId, setCategoryId] = useState("");
 	const [location, setLocation] = useState("");
 	const [date, setDate] = useState("");
 	const [startTime, setStartTime] = useState("");
 	const [endTime, setEndTime] = useState("");
+	const [categoryId, setCategoryId] = useState("");
+	const [authorId, setAuthorId] = useState("");
 
-	const handleSave = async () => {
+	const onSave = async () => {
+		setSubmitted(true);
+		const missing = {
+			image: !image,
+			title: !title,
+			description: !description,
+			location: !location,
+			date: !date,
+			startTime: !startTime,
+			endTime: !endTime,
+			categoryId: !categoryId,
+			authorId: !authorId,
+		};
+		if (Object.values(missing).some(Boolean)) {
+			return;
+		}
+
 		const newEvent = {
+			image,
 			title,
 			description,
-			image,
-			categoryIds: categoryId ? [parseInt(categoryId)] : [],
 			location,
+			categoryIds: [parseInt(categoryId)],
+			createdBy: parseInt(authorId),
 			startTime: date && startTime ? new Date(`${date}T${startTime}`).toISOString() : "",
 			endTime: date && endTime ? new Date(`${date}T${endTime}`).toISOString() : "",
 		};
+		//
 
 		try {
-			const response = await fetch("http://localhost:3000/events", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(newEvent),
-			});
-			if (!response.ok) throw new Error("Fout bij opslaan event");
-			if (onEventAdded) onEventAdded();
+			await addEvent(newEvent);
+			setImage("");
+			setTitle("");
+			setDescription("");
+			setLocation("");
+			setDate("");
+			setStartTime("");
+			setEndTime("");
+			setCategoryId("");
+			setAuthorId("");
+			setSubmitted(false);
 			onClose();
+			if (handleSave) handleSave();
 		} catch (err) {
-			alert("Event opslaan mislukt: " + err.message);
+			alert("Event save failed: " + err.message);
 		}
 	};
 
@@ -45,84 +69,150 @@ export const AddEventModal = ({ isOpen, onClose, onEventAdded }) => {
 			onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Add Event</ModalHeader>
+				<ModalHeader>Add New Event</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !title}>
 						<FormLabel>Event Title</FormLabel>
 						<Input
 							placeholder="Enter event title"
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
 					</FormControl>
-					<FormControl mt={4}>
-						<FormLabel>Event Date</FormLabel>
-						<Input
-							type="date"
-							value={date}
-							onChange={(e) => setDate(e.target.value)}
-						/>
-						<FormLabel mt={2}>Event start time</FormLabel>
-						<Input
-							type="time"
-							value={startTime}
-							onChange={(e) => setStartTime(e.target.value)}
-						/>
-						<FormLabel mt={2}>Event end time</FormLabel>
-						<Input
-							type="time"
-							value={endTime}
-							onChange={(e) => setEndTime(e.target.value)}
-						/>
-					</FormControl>
-					<FormControl mt={4}>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !description}>
 						<FormLabel>Event Description</FormLabel>
 						<Textarea
 							placeholder="Enter event description"
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
 						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
 					</FormControl>
-					<FormControl mt={4}>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !image}>
 						<FormLabel>Event Image URL</FormLabel>
 						<Input
-							placeholder="Enter image URL (optioneel)"
+							placeholder="Enter image URL"
 							value={image}
 							onChange={(e) => setImage(e.target.value)}
 						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
 					</FormControl>
-					<FormControl mt={4}>
-						<FormLabel>Category</FormLabel>
-						<Select
-							placeholder="Select category"
-							value={categoryId}
-							onChange={(e) => setCategoryId(e.target.value)}>
-							<option value="1">sports</option>
-							<option value="2">games</option>
-							<option value="3">relaxation</option>
-						</Select>
-					</FormControl>
-					<FormControl mt={4}>
+
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !location}>
 						<FormLabel>Location</FormLabel>
 						<Input
 							placeholder="Enter location"
 							value={location}
 							onChange={(e) => setLocation(e.target.value)}
 						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !date}>
+						<FormLabel>Event Date</FormLabel>
+						<Input
+							type="date"
+							value={date}
+							onChange={(e) => setDate(e.target.value)}
+						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !startTime}>
+						<FormLabel>Event start time</FormLabel>
+						<Input
+							type="time"
+							value={startTime}
+							onChange={(e) => setStartTime(e.target.value)}
+						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !endTime}>
+						<FormLabel>Event end time</FormLabel>
+						<Input
+							type="time"
+							value={endTime}
+							onChange={(e) => setEndTime(e.target.value)}
+						/>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !categoryId}>
+						<FormLabel>Category</FormLabel>
+						<Select
+							placeholder="Select category"
+							value={categoryId}
+							onChange={(e) => setCategoryId(e.target.value)}>
+							{categories.map((cat) => (
+								<option
+									key={cat.id}
+									value={cat.id}>
+									{cat.name}
+								</option>
+							))}
+						</Select>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						mt={4}
+						isRequired
+						isInvalid={submitted && !authorId}>
+						<FormLabel>Author</FormLabel>
+						<Select
+							placeholder="Select author"
+							value={authorId}
+							onChange={(e) => setAuthorId(e.target.value)}>
+							<option
+								value=""
+								disabled
+								hidden>
+								Select author
+							</option>
+							{users.map((user) => (
+								<option
+									key={user.id}
+									value={user.id}>
+									{user.name}
+								</option>
+							))}
+						</Select>
+						<FormErrorMessage>This field is required.</FormErrorMessage>
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>
 					<Button
-						colorScheme="blue"
+						variant="ghost"
 						mr={3}
 						onClick={onClose}>
-						Sluiten
+						Close
 					</Button>
 					<Button
-						variant="ghost"
-						onClick={handleSave}>
-						Opslaan
+						colorScheme="blue"
+						onClick={onSave}>
+						Save
 					</Button>
 				</ModalFooter>
 			</ModalContent>
