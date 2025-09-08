@@ -51,13 +51,13 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 				onClose();
 			}
 		} catch (err) {
-			alert("Event updaten mislukt: " + err.message);
+			alert("Event update failed: " + err.message);
 		}
 	};
 
 	const handleDelete = async () => {
 		if (!event || !event.id) {
-			alert("Geen geldig event geselecteerd!");
+			alert("No valid event selected!");
 			return;
 		}
 		if (!window.confirm("Are you sure you want to delete this event?")) return;
