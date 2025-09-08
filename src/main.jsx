@@ -1,10 +1,10 @@
-import { ChakraProvider } from "@chakra-ui/react";
-import React from "react";
 import ReactDOM from "react-dom/client";
-import { EventPage, eventLoader } from "./pages/EventPage";
-import { EventsPage, eventsLoader } from "./pages/EventsPage";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./components/Root";
+import { AppProvider } from "./components/AppContext";
+import { ChakraProvider } from "@chakra-ui/react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { EventsPage } from "./pages/EventsPage";
+import { EventPage } from "./pages/EventPage";
 
 const router = createBrowserRouter([
 	{
@@ -14,21 +14,19 @@ const router = createBrowserRouter([
 			{
 				path: "/",
 				element: <EventsPage />,
-				loader: eventsLoader,
 			},
 			{
 				path: "events/:id",
 				element: <EventPage />,
-				loader: eventLoader,
 			},
 		],
 	},
 ]);
 // @ts-ignore
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
-		<ChakraProvider>
+	<ChakraProvider>
+		<AppProvider>
 			<RouterProvider router={router} />
-		</ChakraProvider>
-	</React.StrictMode>
+		</AppProvider>
+	</ChakraProvider>
 );
