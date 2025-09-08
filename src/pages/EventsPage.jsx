@@ -26,10 +26,7 @@ export const EventsPage = () => {
 				maxWidth="1200px"
 				paddingY={8}
 				bg="gray.50">
-				<Box
-					mb={6}
-					display="flex"
-					justifyContent="center">
+				<Box mb={6}>
 					<SearchBar
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}

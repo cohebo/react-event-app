@@ -4,7 +4,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 
 export const SearchBar = ({ value, onChange, onSearch, placeholder = "Zoek..." }) => {
 	return (
-		<InputGroup maxW="400px">
+		<InputGroup width="100%">
 			<InputLeftElement pointerEvents="none">
 				<SearchIcon color="gray.400" />
 			</InputLeftElement>
@@ -16,6 +16,7 @@ export const SearchBar = ({ value, onChange, onSearch, placeholder = "Zoek..." }
 				bg="white"
 				borderRadius="full"
 				boxShadow="sm"
+				width="100%"
 				_focus={{ borderColor: "blue.400", boxShadow: "0 0 0 1px #4299e1" }}
 			/>
 			{onSearch && (
