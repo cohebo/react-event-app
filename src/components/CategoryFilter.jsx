@@ -8,6 +8,8 @@ export const CategoryFilter = ({ categories, selectedCategory, onChange, ...prop
 		onChange={onChange}
 		width="100%"
 		maxWidth={["100%", "50%", "380px"]}
+		bg="white"
+		borderRadius={8}
 		{...props}>
 		{categories.map((category) => (
 			<option

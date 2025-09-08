@@ -14,7 +14,7 @@ export const SearchBar = ({ value, onChange, onSearch, placeholder = "Zoek..." }
 				onChange={onChange}
 				placeholder={placeholder}
 				bg="white"
-				borderRadius="full"
+				borderRadius={8}
 				boxShadow="sm"
 				width="100%"
 				_focus={{ borderColor: "blue.400", boxShadow: "0 0 0 1px #4299e1" }}
