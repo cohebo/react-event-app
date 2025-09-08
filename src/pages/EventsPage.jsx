@@ -1,23 +1,12 @@
-import React from "react";
 import { useState } from "react";
 import { SimpleGrid, Container, Box } from "@chakra-ui/react";
 import { CategoryFilter } from "../components/CategoryFilter";
-import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
 import { SearchBar } from "../components/SearchBar";
-
-export const eventsLoader = async () => {
-	const [eventsResponse, categoriesResponse] = await Promise.all([fetch("http://localhost:3000/events"), fetch("http://localhost:3000/categories")]);
-	if (!eventsResponse.ok || !categoriesResponse.ok) {
-		throw new Error("Events or categories could not be fetched");
-	}
-	const events = await eventsResponse.json();
-	const categories = await categoriesResponse.json();
-	return { events, categories };
-};
+import { useAppContext } from "../components/AppContext";
 
 export const EventsPage = () => {
-	const { events, categories } = useLoaderData();
+	const { events, categories, loading, error } = useAppContext();
 	const [search, setSearch] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -50,19 +39,25 @@ export const EventsPage = () => {
 						onChange={(e) => setSelectedCategory(e.target.value)}
 					/>
 				</Box>
-				<SimpleGrid
-					columns={[1, 2, 3]}
-					spacing={4}>
-					{filteredEvents && filteredEvents.length > 0 ? (
-						filteredEvents.map((event) => (
-							<div key={event.id}>
-								<EventItem event={{ ...event, categories }} />
-							</div>
-						))
-					) : (
-						<div>Geen events gevonden.</div>
-					)}
-				</SimpleGrid>
+				{loading ? (
+					<div>Loading events...</div>
+				) : error ? (
+					<div style={{ color: "red" }}>Error: {error}</div>
+				) : (
+					<SimpleGrid
+						columns={[1, 2, 3]}
+						spacing={4}>
+						{filteredEvents && filteredEvents.length > 0 ? (
+							filteredEvents.map((event) => (
+								<div key={event.id}>
+									<EventItem event={{ ...event, categories }} />
+								</div>
+							))
+						) : (
+							<div>No events found.</div>
+						)}
+					</SimpleGrid>
+				)}
 			</Container>
 		</Box>
 	);
