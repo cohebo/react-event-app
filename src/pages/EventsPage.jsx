@@ -31,7 +31,7 @@ export const EventsPage = () => {
 		<Box bg="gray.50">
 			<Container
 				maxWidth="1200px"
-				paddingY={8}
+				paddingY={6}
 				bg="gray.50">
 				<Box
 					mb={6}
