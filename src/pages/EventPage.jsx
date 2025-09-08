@@ -22,7 +22,9 @@ export const EventPage = () => {
 	if (!event) return <div>Event niet gevonden.</div>;
 
 	return (
-		<Box bg="gray.50">
+		<Box
+			bg="gray.50"
+			minHeight="100vh">
 			<Container
 				maxW="1200px"
 				minH="100vh"
