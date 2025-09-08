@@ -1,5 +1,6 @@
 import React from "react";
-import { SimpleGrid, Container, Box } from "@chakra-ui/react";
+import { useState } from "react";
+import { SimpleGrid, Container, Box, Select } from "@chakra-ui/react";
 import { useLoaderData } from "react-router-dom";
 import { EventItem } from "../components/EventItem";
 import { SearchBar } from "../components/SearchBar";
@@ -16,9 +17,14 @@ export const eventsLoader = async () => {
 
 export const EventsPage = () => {
 	const { events, categories } = useLoaderData();
-	const [search, setSearch] = React.useState("");
+	const [search, setSearch] = useState("");
+	const [selectedCategory, setSelectedCategory] = useState("");
 
-	const filteredEvents = events.filter((event) => event.title.toLowerCase().includes(search.toLowerCase()) || event.description.toLowerCase().includes(search.toLowerCase()));
+	const filteredEvents = events.filter((event) => {
+		const matchesSearch = event.title.toLowerCase().includes(search.toLowerCase()) || event.description.toLowerCase().includes(search.toLowerCase());
+		const matchesCategory = !selectedCategory || (event.categoryIds && event.categoryIds.map(String).includes(selectedCategory));
+		return matchesSearch && matchesCategory;
+	});
 
 	return (
 		<Box bg="gray.50">
@@ -26,12 +32,31 @@ export const EventsPage = () => {
 				maxWidth="1200px"
 				paddingY={8}
 				bg="gray.50">
-				<Box mb={6}>
+				<Box
+					mb={6}
+					display="flex"
+					gap={4}
+					flexDirection={["column", "row", "row"]}>
 					<SearchBar
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
 						placeholder="Zoek op titel of omschrijving..."
+						style={{ width: "100%", maxWidth: "400px" }}
 					/>
+					<Select
+						placeholder="Selecteer een categorie"
+						value={selectedCategory}
+						onChange={(e) => setSelectedCategory(e.target.value)}
+						width="100%"
+						maxWidth={["100%", "400px", "380px"]}>
+						{categories.map((category) => (
+							<option
+								key={category.id}
+								value={category.id}>
+								{category.name}
+							</option>
+						))}
+					</Select>
 				</Box>
 				<SimpleGrid
 					columns={[1, 2, 3]}
