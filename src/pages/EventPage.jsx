@@ -1,28 +1,56 @@
-import React from "react";
-import { Box, Container, Stack, Image, Heading, Text, Badge } from "@chakra-ui/react";
-import { useLoaderData } from "react-router-dom";
+import { Box, Container, Stack, Image, Heading, Text, Badge, Button } from "@chakra-ui/react";
+import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { EditEventModal } from "../components/EditEventModal";
 import formatEventDateTime from "../helpers/formatEventDateTime";
-
-export const eventLoader = async ({ params }) => {
-	const [eventRes, categoriesRes, usersRes] = await Promise.all([fetch(`http://localhost:3000/events/${params.id}`), fetch("http://localhost:3000/categories"), fetch("http://localhost:3000/users")]);
-	if (!eventRes.ok || !categoriesRes.ok || !usersRes.ok) throw new Error("Failed to fetch data");
-	const event = await eventRes.json();
-	const categories = await categoriesRes.json();
-	const users = await usersRes.json();
-	return { ...event, categories, users };
-};
+import { useAppContext } from "../components/AppContext";
 
 export const EventPage = () => {
-	const event = useLoaderData();
-	const eventAuthor = event.users?.find((u) => u.id === event.createdBy);
-	const { dateString, timeString } = formatEventDateTime(event.startTime, event.endTime);
-	const categories = event.categoryIds.map((id) => event.categories.find((c) => c.id === id)).filter(Boolean);
+	const { id } = useParams();
+	const { events, users, categories, loading } = useAppContext();
+	const event = events.find((e) => String(e.id) === String(id));
+	const allCategories = categories;
+	const allUsers = users;
+	const eventAuthor = event && allUsers.find((u) => u.id === event.createdBy);
+	const { dateString, timeString } = event ? formatEventDateTime(event.startTime, event.endTime) : { dateString: "", timeString: "" };
+	const eventCategories = event && event.categoryIds ? event.categoryIds.map((catId) => allCategories.find((c) => c.id === catId)).filter(Boolean) : [];
+	const [isEditOpen, setIsEditOpen] = useState(false);
+	const navigate = useNavigate();
+
+	if (loading) return <div>Loading...</div>;
+	if (!event) return <div>Event niet gevonden.</div>;
+
 	return (
 		<Box bg="gray.50">
 			<Container
 				maxW="1200px"
 				minH="100vh"
-				paddingY={8}>
+				py={6}>
+				<Box
+					display="flex"
+					justifyContent="space-between"
+					alignItems="center"
+					mb={6}>
+					<Button
+						leftIcon={<ArrowBackIcon />}
+						onClick={() => window.history.back()}
+						colorScheme="blue"
+						variant="outline"
+						borderRadius={8}>
+						Back to Events
+					</Button>
+					<Box>
+						<Button
+							colorScheme="yellow"
+							variant="outline"
+							borderRadius={8}
+							leftIcon={<EditIcon />}
+							onClick={() => setIsEditOpen(true)}>
+							Edit Event
+						</Button>
+					</Box>
+				</Box>
 				<Box
 					borderWidth={1}
 					borderRadius="md"
@@ -40,8 +68,7 @@ export const EventPage = () => {
 								src={event.image}
 								alt={event.title}
 								objectFit="cover"
-								borderTopRadius={["md", 0]}
-								borderLeftRadius={[0, "md"]}
+								borderTopRadius={0}
 								borderBottomRadius={0}
 								borderRightRadius={0}
 								m={0}
@@ -87,7 +114,7 @@ export const EventPage = () => {
 								<Stack
 									direction="row"
 									spacing={2}>
-									{categories.map((cat) => (
+									{eventCategories.map((cat) => (
 										<Badge
 											key={cat.id}
 											color="blue.500"
@@ -129,6 +156,16 @@ export const EventPage = () => {
 						</Box>
 					</Stack>
 				</Box>
+				<EditEventModal
+					isOpen={isEditOpen}
+					onClose={() => setIsEditOpen(false)}
+					event={event}
+					onEventUpdated={() => {
+						setIsEditOpen(false);
+						navigate(`/events/${event.id}`, { replace: true });
+					}}
+					onEventDeleted={() => navigate("/", { replace: true })}
+				/>
 			</Container>
 		</Box>
 	);
