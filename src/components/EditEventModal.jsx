@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 import {
 	Modal,
 	ModalOverlay,
@@ -20,6 +21,7 @@ import { useAppContext } from "./AppContext";
 
 export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEventDeleted }) => {
 	const { categories, deleteEvent, updateEvent } = useAppContext();
+	const toast = useToast();
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [image, setImage] = useState("");
@@ -61,13 +63,26 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 		};
 		try {
 			await updateEvent(updatedEvent);
+			toast({
+				title: "Event updated.",
+				description: "The event was successfully updated.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
 			if (onEventUpdated) {
 				onEventUpdated();
 			} else {
 				onClose();
 			}
 		} catch (err) {
-			alert("Event update failed: " + err.message);
+			toast({
+				title: "Update failed.",
+				description: err.message,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
 		}
 	};
 
@@ -79,10 +94,23 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 		if (!window.confirm("Are you sure you want to delete this event?")) return;
 		try {
 			await deleteEvent(event.id);
+			toast({
+				title: "Event deleted.",
+				description: "The event was successfully deleted.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
 			if (onEventDeleted) onEventDeleted();
 			onClose();
 		} catch (err) {
-			alert("Event deletion failed: " + err.message);
+			toast({
+				title: "Delete failed.",
+				description: err.message,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
 		}
 	};
 
