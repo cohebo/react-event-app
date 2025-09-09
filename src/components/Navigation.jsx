@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { Flex, Box, Link, Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
@@ -8,6 +9,7 @@ export const Navigation = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
+	const navigate = useNavigate();
 
 	return (
 		<Flex
@@ -48,6 +50,10 @@ export const Navigation = () => {
 				<AddEventModal
 					isOpen={isModalOpen}
 					onClose={closeModal}
+					handleSave={() => {
+						closeModal();
+						navigate("/");
+					}}
 				/>
 			</Box>
 		</Flex>
