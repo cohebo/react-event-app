@@ -1,32 +1,35 @@
-import { CheckboxGroup, Checkbox, Stack, FormLabel, Box } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList, MenuOptionGroup, MenuItemOption, Button } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useAppContext } from "./AppContext";
 
-export const CategoryFilter = ({ selectedCategory, onChange, ...props }) => {
+export const CategoryFilter = ({ selectedCategory, onChange }) => {
 	const { categories } = useAppContext();
 	return (
-		<Box>
-			<FormLabel
-				mb={0.5}
-				fontSize="sm"
+		<Menu closeOnSelect={false}>
+			<MenuButton
+				as={Button}
+				rightIcon={<ChevronDownIcon />}
+				variant="outline"
 				fontWeight="semibold"
-				color="gray.600">
+				fontSize="sm"
+				minWidth="200px"
+				background="white">
 				Filter by categories
-			</FormLabel>
-			<CheckboxGroup
-				colorScheme="blue"
-				value={selectedCategory}
-				onChange={onChange}
-				{...props}>
-				<Stack direction="row">
+			</MenuButton>
+			<MenuList minWidth="200px">
+				<MenuOptionGroup
+					type="checkbox"
+					value={selectedCategory}
+					onChange={onChange}>
 					{categories.map((category) => (
-						<Checkbox
+						<MenuItemOption
 							key={category.id}
 							value={String(category.id)}>
 							{category.name}
-						</Checkbox>
+						</MenuItemOption>
 					))}
-				</Stack>
-			</CheckboxGroup>
-		</Box>
+				</MenuOptionGroup>
+			</MenuList>
+		</Menu>
 	);
 };
