@@ -1,25 +1,24 @@
-import { Box, Container, Stack, Image, Heading, Text, Badge, Button } from "@chakra-ui/react";
+import { Box, Container, Stack, Image, Heading, Text, Button } from "@chakra-ui/react";
 import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditEventModal } from "../components/EditEventModal";
 import formatEventDateTime from "../helpers/formatEventDateTime";
 import { useAppContext } from "../components/AppContext";
+import { CategoryBadges } from "../components/CategoryBadges";
 
 export const EventPage = () => {
 	const { id } = useParams();
 	const { events, users, categories, loading } = useAppContext();
 	const event = events.find((e) => String(e.id) === String(id));
-	const allCategories = categories;
 	const allUsers = users;
 	const eventAuthor = event && allUsers.find((u) => u.id === event.createdBy);
 	const { dateString, timeString } = event ? formatEventDateTime(event.startTime, event.endTime) : { dateString: "", timeString: "" };
-	const eventCategories = event && event.categoryIds ? event.categoryIds.map((catId) => allCategories.find((c) => c.id === catId)).filter(Boolean) : [];
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const navigate = useNavigate();
 
 	if (loading) return <div>Loading...</div>;
-	if (!event) return <div>Event niet gevonden.</div>;
+	if (!event) return <div>Event not found.</div>;
 
 	return (
 		<Box
@@ -101,7 +100,7 @@ export const EventPage = () => {
 								<Text
 									color="gray.500"
 									fontSize="sm">
-									Locatie: {event.location}
+									Location: {event.location}
 								</Text>
 								<Text
 									fontSize="sm"
@@ -113,21 +112,7 @@ export const EventPage = () => {
 									color="gray.600">
 									{timeString}
 								</Text>
-								<Stack
-									direction="row"
-									spacing={2}>
-									{eventCategories.map((cat) => (
-										<Badge
-											key={cat.id}
-											color="blue.500"
-											size="sm"
-											borderRadius="full"
-											px={2}
-											py={1}>
-											{cat.name}
-										</Badge>
-									))}
-								</Stack>
+								<CategoryBadges categoryIds={event.categoryIds} />
 								{eventAuthor ? (
 									<Box
 										display="flex"
@@ -143,7 +128,7 @@ export const EventPage = () => {
 										<Text
 											fontSize="sm"
 											color="gray.700">
-											Gemaakt door: {eventAuthor.name}
+											Created by: {eventAuthor.name}
 										</Text>
 									</Box>
 								) : (

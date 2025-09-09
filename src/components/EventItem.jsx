@@ -1,6 +1,7 @@
-import { Card, CardBody, Stack, Heading, Image, Text, Badge } from "@chakra-ui/react";
+import { Card, CardBody, Stack, Heading, Image, Text } from "@chakra-ui/react";
 import formatEventDateTime from "../helpers/formatEventDateTime";
 import { useNavigate } from "react-router-dom";
+import { CategoryBadges } from "./CategoryBadges";
 
 export const EventItem = ({ event }) => {
 	const navigate = useNavigate();
@@ -67,24 +68,7 @@ export const EventItem = ({ event }) => {
 							</>
 						);
 					})()}
-					<Stack
-						direction="row"
-						spacing={2}>
-						{event.categoryIds.map(
-							(id) =>
-								event.categories.find((category) => category.id === id) && (
-									<Badge
-										key={id}
-										color="blue.500"
-										size="sm"
-										borderRadius="full"
-										px={2}
-										py={1}>
-										{event.categories.find((category) => category.id === id).name}
-									</Badge>
-								)
-						)}
-					</Stack>
+					<CategoryBadges categoryIds={event.categoryIds} />
 				</Stack>
 			</CardBody>
 		</Card>
