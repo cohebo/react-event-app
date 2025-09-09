@@ -1,5 +1,21 @@
 import { useState, useEffect } from "react";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, Textarea, Select } from "@chakra-ui/react";
+import {
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	ModalCloseButton,
+	Button,
+	FormControl,
+	FormLabel,
+	Input,
+	Textarea,
+	Checkbox,
+	CheckboxGroup,
+	Stack,
+} from "@chakra-ui/react";
 import { useAppContext } from "./AppContext";
 
 export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEventDeleted }) => {
@@ -7,7 +23,7 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [image, setImage] = useState("");
-	const [categoryId, setCategoryId] = useState("");
+	const [categoryIds, setCategoryIds] = useState([]);
 	const [location, setLocation] = useState("");
 	const [date, setDate] = useState("");
 	const [startTime, setStartTime] = useState("");
@@ -18,7 +34,7 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 			setTitle(event.title || "");
 			setDescription(event.description || "");
 			setImage(event.image || "");
-			setCategoryId(event.categoryIds ? String(event.categoryIds[0]) : "");
+			setCategoryIds(event.categoryIds ? event.categoryIds.map(String) : []);
 			setLocation(event.location || "");
 			if (event.startTime) {
 				const d = new Date(event.startTime);
@@ -38,7 +54,7 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 			title,
 			description,
 			image,
-			categoryIds: categoryId ? [parseInt(categoryId)] : [],
+			categoryIds: categoryIds.map((id) => parseInt(id)),
 			location,
 			startTime: date && startTime ? new Date(`${date}T${startTime}`).toISOString() : "",
 			endTime: date && endTime ? new Date(`${date}T${endTime}`).toISOString() : "",
@@ -121,18 +137,21 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 						/>
 					</FormControl>
 					<FormControl mt={4}>
-						<FormLabel>Category</FormLabel>
-						<Select
-							value={categoryId}
-							onChange={(e) => setCategoryId(e.target.value)}>
-							{categories.map((cat) => (
-								<option
-									key={cat.id}
-									value={cat.id}>
-									{cat.name}
-								</option>
-							))}
-						</Select>
+						<FormLabel>Categories</FormLabel>
+						<CheckboxGroup
+							colorScheme="blue"
+							value={categoryIds}
+							onChange={(values) => setCategoryIds(values)}>
+							<Stack direction="column">
+								{categories.map((cat) => (
+									<Checkbox
+										key={cat.id}
+										value={String(cat.id)}>
+										{cat.name}
+									</Checkbox>
+								))}
+							</Stack>
+						</CheckboxGroup>
 					</FormControl>
 					<FormControl mt={4}>
 						<FormLabel>Location</FormLabel>

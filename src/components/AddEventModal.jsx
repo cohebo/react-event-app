@@ -1,6 +1,24 @@
 import { useState } from "react";
 import { useAppContext } from "./AppContext";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, Select, Textarea, FormErrorMessage } from "@chakra-ui/react";
+import {
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	ModalCloseButton,
+	Button,
+	FormControl,
+	FormLabel,
+	Input,
+	Select,
+	Textarea,
+	FormErrorMessage,
+	Checkbox,
+	CheckboxGroup,
+	Stack,
+} from "@chakra-ui/react";
 
 export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 	const { users, categories, addEvent } = useAppContext();
@@ -12,7 +30,7 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 	const [date, setDate] = useState("");
 	const [startTime, setStartTime] = useState("");
 	const [endTime, setEndTime] = useState("");
-	const [categoryId, setCategoryId] = useState("");
+	const [categoryIds, setCategoryIds] = useState([]);
 	const [authorId, setAuthorId] = useState("");
 
 	const onSave = async () => {
@@ -25,7 +43,7 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 			date: !date,
 			startTime: !startTime,
 			endTime: !endTime,
-			categoryId: !categoryId,
+			categoryIds: !categoryIds.length,
 			authorId: !authorId,
 		};
 		if (Object.values(missing).some(Boolean)) {
@@ -37,12 +55,11 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 			title,
 			description,
 			location,
-			categoryIds: [parseInt(categoryId)],
+			categoryIds: categoryIds.map((id) => parseInt(id)),
 			createdBy: parseInt(authorId),
 			startTime: date && startTime ? new Date(`${date}T${startTime}`).toISOString() : "",
 			endTime: date && endTime ? new Date(`${date}T${endTime}`).toISOString() : "",
 		};
-		//
 
 		try {
 			await addEvent(newEvent);
@@ -53,7 +70,7 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 			setDate("");
 			setStartTime("");
 			setEndTime("");
-			setCategoryId("");
+			setCategoryIds([]);
 			setAuthorId("");
 			setSubmitted(false);
 			onClose();
@@ -160,20 +177,22 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 					<FormControl
 						mt={4}
 						isRequired
-						isInvalid={submitted && !categoryId}>
-						<FormLabel>Category</FormLabel>
-						<Select
-							placeholder="Select category"
-							value={categoryId}
-							onChange={(e) => setCategoryId(e.target.value)}>
-							{categories.map((cat) => (
-								<option
-									key={cat.id}
-									value={cat.id}>
-									{cat.name}
-								</option>
-							))}
-						</Select>
+						isInvalid={submitted && !categoryIds.length}>
+						<FormLabel>Categories</FormLabel>
+						<CheckboxGroup
+							colorScheme="blue"
+							value={categoryIds}
+							onChange={(values) => setCategoryIds(values)}>
+							<Stack direction="column">
+								{categories.map((cat) => (
+									<Checkbox
+										key={cat.id}
+										value={String(cat.id)}>
+										{cat.name}
+									</Checkbox>
+								))}
+							</Stack>
+						</CheckboxGroup>
 						<FormErrorMessage>This field is required.</FormErrorMessage>
 					</FormControl>
 					<FormControl
