@@ -148,6 +148,19 @@
       "startTime": "2025-06-12T11:00:00.000Z",
       "endTime": "2025-06-12T14:00:00.000Z",
       "id": 10
+    },
+    {
+      "image": "https://images.unsplash.com/photo-1436918898788-ebce04d38e46?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8TGV0dGVycHJlc3N8ZW58MHx8MHx8fDA%3D",
+      "title": "Letterpress event (test)",
+      "description": "Lorem Ipsum Event",
+      "location": "Gutenberg, Germany",
+      "categoryIds": [
+        3
+      ],
+      "createdBy": 1,
+      "startTime": "2024-12-02T08:00:00.000Z",
+      "endTime": "2024-12-02T16:00:00.000Z",
+      "id": 11
     }
   ],
   "categories": [
