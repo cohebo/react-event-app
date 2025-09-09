@@ -10,11 +10,11 @@
       "name": "Sophia Collins",
       "image": "https://wincacademy.github.io/webpages/media/article-author.png"
     },
-	{
+    {
       "id": 3,
       "name": "Emily Carter",
       "image": "https://wincacademy.github.io/webpages/media/person9.jpeg"
-	}
+    }
   ],
   "events": [
     {
@@ -122,18 +122,33 @@
       "startTime": "2023-03-16T07:00:00.000Z",
       "endTime": "2023-03-16T09:30:00.000Z"
     },
-	{
+    {
       "id": 9,
       "createdBy": 3,
       "title": "Bowling night",
       "description": "Strike up some fun with friends at the lanes!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-rnnzeravac-9273055.jpg",
-      "categoryIds": [2],
+      "categoryIds": [
+        2
+      ],
       "location": "Downtown Bowling Alley",
       "startTime": "2023-03-19T18:00:00.000Z",
       "endTime": "2023-03-19T21:00:00.000Z"
-	}
-	
+    },
+    {
+      "image": "https://images.unsplash.com/photo-1756993399574-2fa126269ce7?q=80&w=1975&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "title": "Test Event",
+      "description": "Trail hike",
+      "location": "Moab, USA",
+      "categoryIds": [
+        1,
+        3
+      ],
+      "createdBy": 3,
+      "startTime": "2025-06-12T11:00:00.000Z",
+      "endTime": "2025-06-12T14:00:00.000Z",
+      "id": 10
+    }
   ],
   "categories": [
     {
