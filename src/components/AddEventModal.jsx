@@ -18,10 +18,12 @@ import {
 	Checkbox,
 	CheckboxGroup,
 	Stack,
+	useToast,
 } from "@chakra-ui/react";
 
 export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 	const { users, categories, addEvent } = useAppContext();
+	const toast = useToast();
 	const [submitted, setSubmitted] = useState(false);
 	const [image, setImage] = useState("");
 	const [title, setTitle] = useState("");
@@ -63,6 +65,13 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 
 		try {
 			await addEvent(newEvent);
+			toast({
+				title: "Event created.",
+				description: "The event was successfully created.",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
 			setImage("");
 			setTitle("");
 			setDescription("");
@@ -76,7 +85,13 @@ export const AddEventModal = ({ isOpen, onClose, handleSave }) => {
 			onClose();
 			if (handleSave) handleSave();
 		} catch (err) {
-			alert("Event save failed: " + err.message);
+			toast({
+				title: "Event creation failed.",
+				description: err.message,
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
 		}
 	};
 
