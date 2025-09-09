@@ -28,7 +28,7 @@ export const EventsPage = () => {
 					mb={6}
 					display="flex"
 					gap={4}
-					flexDirection={["column", "column", "row"]}>
+					flexDirection={["column", "row", "row"]}>
 					<SearchBar
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
