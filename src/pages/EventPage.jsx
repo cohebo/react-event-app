@@ -9,7 +9,7 @@ import { CategoryBadges } from "../components/CategoryBadges";
 
 export const EventPage = () => {
 	const { id } = useParams();
-	const { events, users, categories, loading } = useAppContext();
+	const { events, users, loading } = useAppContext();
 	const event = events.find((e) => String(e.id) === String(id));
 	const allUsers = users;
 	const eventAuthor = event && allUsers.find((u) => u.id === event.createdBy);
