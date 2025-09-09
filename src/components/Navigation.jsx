@@ -36,13 +36,14 @@ export const Navigation = () => {
 				</Link>
 				<Button
 					bg="white"
-					color="blue.600"
+					color="blue.800"
+					background="white"
 					fontWeight="bold"
 					px={4}
 					py={2}
 					borderRadius="md"
 					ml={4}
-					_hover={{ bg: "blue.100" }}
+					_hover={{ bg: "blue.300" }}
 					leftIcon={<AddIcon />}
 					onClick={openModal}>
 					Add Event
