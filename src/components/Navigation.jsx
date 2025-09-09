@@ -32,7 +32,7 @@ export const Navigation = () => {
 					fontWeight="bold"
 					fontSize="2xl"
 					_hover={{ textDecoration: "none", color: "blue.300" }}>
-					EventApp
+					Event App
 				</Link>
 				<Button
 					bg="white"
