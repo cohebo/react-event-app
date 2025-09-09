@@ -14,9 +14,9 @@ export const AppProvider = ({ children }) => {
 		setError(null);
 		try {
 			const [eventsRes, categoriesRes, usersRes] = await Promise.all([fetch("http://localhost:3000/events"), fetch("http://localhost:3000/categories"), fetch("http://localhost:3000/users")]);
-			if (!eventsRes.ok) throw new Error("Events ophalen mislukt");
-			if (!categoriesRes.ok) throw new Error("Categories ophalen mislukt");
-			if (!usersRes.ok) throw new Error("Users ophalen mislukt");
+			if (!eventsRes.ok) throw new Error("Failed to fetch events");
+			if (!categoriesRes.ok) throw new Error("Failed to fetch categories");
+			if (!usersRes.ok) throw new Error("Failed to fetch users");
 			const [eventsData, categoriesData, usersData] = await Promise.all([eventsRes.json(), categoriesRes.json(), usersRes.json()]);
 			setEvents(eventsData);
 			setCategories(categoriesData);
@@ -44,7 +44,7 @@ export const AppProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(event),
 			});
-			if (!res.ok) throw new Error("Event toevoegen mislukt");
+			if (!res.ok) throw new Error("Failed to add event");
 			await fetchAll();
 		} catch (e) {
 			setError(e.message);
@@ -62,7 +62,7 @@ export const AppProvider = ({ children }) => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(event),
 			});
-			if (!res.ok) throw new Error("Event bijwerken mislukt");
+			if (!res.ok) throw new Error("Failed to update event");
 			await fetchAll();
 		} catch (e) {
 			setError(e.message);
@@ -78,7 +78,7 @@ export const AppProvider = ({ children }) => {
 			const res = await fetch(`http://localhost:3000/events/${id}`, {
 				method: "DELETE",
 			});
-			if (!res.ok) throw new Error("Event verwijderen mislukt");
+			if (!res.ok) throw new Error("Failed to delete event");
 			await fetchAll();
 		} catch (e) {
 			setError(e.message);
@@ -87,7 +87,22 @@ export const AppProvider = ({ children }) => {
 		}
 	};
 
-	return <AppContext.Provider value={{ events, categories, users, addEvent, updateEvent, deleteEvent, fetchAll, loading, error }}>{children}</AppContext.Provider>;
+	return (
+		<AppContext.Provider
+			value={{
+				events,
+				categories,
+				users,
+				addEvent,
+				updateEvent,
+				deleteEvent,
+				fetchAll,
+				loading,
+				error,
+			}}>
+			{children}
+		</AppContext.Provider>
+	);
 };
 
 export const useAppContext = () => useContext(AppContext);
