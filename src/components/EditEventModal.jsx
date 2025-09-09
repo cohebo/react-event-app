@@ -88,7 +88,12 @@ export const EditEventModal = ({ isOpen, onClose, event, onEventUpdated, onEvent
 
 	const handleDelete = async () => {
 		if (!event || !event.id) {
-			alert("No valid event selected!");
+			toast({
+				title: "No valid event selected!",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
 			return;
 		}
 		if (!window.confirm("Are you sure you want to delete this event?")) return;
