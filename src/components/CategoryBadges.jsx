@@ -3,7 +3,6 @@ import { Wrap, Badge } from "@chakra-ui/react";
 
 export const CategoryBadges = ({ categoryIds }) => {
 	const { categories } = useAppContext();
-	// ...
 	if (!Array.isArray(categoryIds) || categoryIds.length === 0) return null;
 	return (
 		<Wrap
