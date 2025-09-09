@@ -8,11 +8,11 @@ import { useAppContext } from "../components/AppContext";
 export const EventsPage = () => {
 	const { events, categories, loading, error } = useAppContext();
 	const [search, setSearch] = useState("");
-	const [selectedCategory, setSelectedCategory] = useState("");
+	const [selectedCategory, setSelectedCategory] = useState([]);
 
 	const filteredEvents = events.filter((event) => {
 		const matchesSearch = event.title.toLowerCase().includes(search.toLowerCase()) || event.description.toLowerCase().includes(search.toLowerCase());
-		const matchesCategory = !selectedCategory || (event.categoryIds && event.categoryIds.map(String).includes(selectedCategory));
+		const matchesCategory = !selectedCategory.length || (event.categoryIds && event.categoryIds.some((id) => selectedCategory.includes(String(id))));
 		return matchesSearch && matchesCategory;
 	});
 
@@ -38,7 +38,7 @@ export const EventsPage = () => {
 					<CategoryFilter
 						categories={categories}
 						selectedCategory={selectedCategory}
-						onChange={(e) => setSelectedCategory(e.target.value)}
+						onChange={setSelectedCategory}
 					/>
 				</Box>
 				{loading ? (
@@ -50,11 +50,13 @@ export const EventsPage = () => {
 						columns={[1, 2, 3]}
 						spacing={4}>
 						{filteredEvents && filteredEvents.length > 0 ? (
-							filteredEvents.map((event) => (
-								<div key={event.id}>
-									<EventItem event={{ ...event, categories }} />
-								</div>
-							))
+							filteredEvents.map((event) => {
+								return (
+									<div key={event.id}>
+										<EventItem event={{ ...event }} />
+									</div>
+								);
+							})
 						) : (
 							<div>No events found.</div>
 						)}
